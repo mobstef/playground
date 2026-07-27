@@ -1,6 +1,8 @@
 === Zoned Deployment
 
-[mermaid]
+// Buggy behavior of GitHub
+[source, mermaid]
+// [mermaid]
 ....
 ---
 config:
