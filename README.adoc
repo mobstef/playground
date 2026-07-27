@@ -1,5 +1,26 @@
+:toc: left
+ifdef::env-github[:toc-placement!:]
+:toclevels: 3
+:sectnums:
+
+:base-dir: ..
+
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
 = Playground
 
-== Flow diagram
+== Introduction
+
+It's just a playground.
+
+== Diagrams
+
+=== Flowchart
 
 - xref:doc/flowchart/architecture.adoc[Architecture]
