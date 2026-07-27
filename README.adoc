@@ -1,0 +1,5 @@
+= Playground
+
+== Flow diagram
+
+- xref:doc/flowchart/architecture.adoc[Architecture]
