@@ -1,0 +1,81 @@
+=== Zoned Deployment
+
+[mermaid]
+....
+---
+config:
+    flowchart:
+        defaultRenderer: elk
+---
+flowchart
+    subgraph ext[External Zones]
+        subgraph agent-ext[Agents]
+            agent-ext-1[Agent]
+            agent-ext-2[...]
+            agent-ext-3[Agent]
+        end
+    end
+    subgraph im[Intermediate Zones]
+        subgraph agent-im[Agents]
+            agent-im-1[Agent]
+            agent-im-2[...]
+            agent-im-3[Agent]
+        end
+        subgraph proxy-im[Proxies]
+            subgraph proxy-im-ny[USA]
+                proxy-im-usa-1([Envoy 1])
+                proxy-im-usa-2([Envoy 2])
+            end
+            subgraph proxy-im-any[...]
+                proxy-im-any-1([Envoy 1])
+                proxy-im-any-2([Envoy 2])
+            end
+            subgraph proxy-im-eu[EU]
+                proxy-im-eu-1([Envoy 1])
+                proxy-im-eu-2([Envoy 2])
+            end
+        end
+    end
+    subgraph int[Internal Zone]
+        subgraph agent-int[Agents]
+            agent-int-1[Agent]
+            agent-int-2[...]
+            agent-int-3[Agent]
+        end
+        subgraph proxy-int[Proxies]
+            subgraph proxy-int-int[API Gateway]
+                proxy-int-int-1([Envoy 1])
+                proxy-int-int-2([Envoy 2])
+                proxy-int-int-3([Envoy 3])
+                proxy-int-int-4([Envoy 4])
+            end
+        end
+        subgraph k8s-collector[Kubernetes]
+            subgraph k8s-collector-1[Alfa]
+                proxy-k8s-1([HTTPProxy])
+                collector-1[[Collector]]
+                proxy-k8s-1 -- h2c::8080 --> collector-1
+            end
+            subgraph k8s-collector-2[Bravo]
+                proxy-k8s-2([HTTPProxy])
+                collector-2[[Collector]]
+                proxy-k8s-2 -- h2c::8080 --> collector-2
+            end
+        end
+        subgraph k8s-loader[Kubernetes]
+            subgraph k8s-loader-1[Alfa]
+                loader-1[[Loader]]
+                dbmon-1{{DB Monitor}}
+            end
+            subgraph k8s-loader-2[Bravo]
+                loader-2[[Loader]]
+            end
+        end
+        kafka[(Kafka)]
+        db[(Database)]
+        collector-1 & collector-2 --> kafka --> loader-1 & loader-2 --> db --> dbmon-1 --> db
+    end
+    agent-ext -- tcp::7777 --> proxy-im -- h2:api.example.com --> proxy-int
+    agent-im & agent-int -- tcp::7777 --> proxy-int
+    proxy-int -- h2 --> k8s-collector
+....
