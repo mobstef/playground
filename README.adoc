@@ -19,8 +19,8 @@ endif::[]
 
 It's just a playground.
 
-== Diagrams
+toc::[]
 
-=== Flowchart
+== Architecture
 
-- xref:doc/flowchart/architecture.adoc[Architecture]
+- xref:doc/flowchart/architecture.adoc[Flowchart]

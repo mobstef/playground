@@ -1,8 +1,8 @@
-=== Zoned Deployment
+=== Kubernetes
 
 // Buggy behavior of GitHub
 [source, mermaid]
-// [mermaid]
+//[mermaid]
 ....
 ---
 config:
@@ -25,16 +25,16 @@ flowchart
         end
         subgraph proxy-im[Proxies]
             subgraph proxy-im-ny[USA]
-                proxy-im-usa-1([Envoy 1])
-                proxy-im-usa-2([Envoy 2])
+                proxy-im-usa-1([Envoy])
+                proxy-im-usa-2([Envoy])
             end
             subgraph proxy-im-any[...]
-                proxy-im-any-1([Envoy 1])
-                proxy-im-any-2([Envoy 2])
+                proxy-im-any-1([Envoy])
+                proxy-im-any-2([Envoy])
             end
             subgraph proxy-im-eu[EU]
-                proxy-im-eu-1([Envoy 1])
-                proxy-im-eu-2([Envoy 2])
+                proxy-im-eu-1([Envoy])
+                proxy-im-eu-2([Envoy])
             end
         end
     end
@@ -46,10 +46,10 @@ flowchart
         end
         subgraph proxy-int[Proxies]
             subgraph proxy-int-int[API Gateway]
-                proxy-int-int-1([Envoy 1])
-                proxy-int-int-2([Envoy 2])
-                proxy-int-int-3([Envoy 3])
-                proxy-int-int-4([Envoy 4])
+                proxy-int-int-1([Envoy])
+                proxy-int-int-2([Envoy])
+                proxy-int-int-3([Envoy])
+                proxy-int-int-4([Envoy])
             end
         end
         subgraph k8s-collector[Kubernetes]
@@ -80,4 +80,84 @@ flowchart
     agent-ext -- tcp::7777 --> proxy-im -- h2:api.example.com --> proxy-int
     agent-im & agent-int -- tcp::7777 --> proxy-int
     proxy-int -- h2 --> k8s-collector
+....
+
+=== VM/BM
+
+// Buggy behavior of GitHub
+[source, mermaid]
+//[mermaid]
+....
+---
+config:
+    flowchart:
+        defaultRenderer: elk
+---
+flowchart
+    subgraph int[Internal Zone]
+        subgraph proxy[API Gateway]
+            subgraph proxy-eu[EU]
+                proxy-1(["`1
+                    Envoy`"])
+                proxy-3(["`3
+                    Envoy`"])
+            end
+            subgraph proxy-us[US]
+                proxy-2(["`2
+                    Envoy`"])
+                proxy-4(["`4
+                    Envoy`"])
+            end
+            proxy-eu ~~~ proxy-us
+        end
+        subgraph app-1[Heavy App]
+            subgraph app-1-eu[EU]
+                app-1-1["`1
+                    Envoy
+                    Heavy App`"]
+                app-1-3["`3
+                    Envoy
+                    Heavy App`"]
+                app-1-5["`5
+                    Envoy
+                    Heavy App`"]
+            end
+            subgraph app-1-us[US]
+                app-1-2["`2
+                    Envoy
+                    Heavy App`"]
+                app-1-4["`4
+                    Envoy
+                    Heavy App`"]
+                app-1-6["`6
+                    Envoy
+                    Heavy App`"]
+            end
+            app-1-eu ~~~ app-1-us
+        end
+        subgraph app-2[Light App]
+            subgraph app-2-eu[EU]
+                app-2-1["`1
+                    Envoy
+                    Light App 1
+                    Light App 2`"]
+                app-2-3["`3
+                    Envoy
+                    Light App 1
+                    Light App 2`"]
+            end
+            subgraph app-2-us[US]
+                app-2-2["`2
+                    Envoy
+                    Light App 1
+                    Light App 2`"]
+                app-2-4["`4
+                    Envoy
+                    Light App 1
+                    Light App 2`"]
+            end
+            app-2-eu ~~~ app-2-us
+        end
+    end
+    proxy -- h2 --> app-1 & app-2
 ....
