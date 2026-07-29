@@ -24,7 +24,7 @@ flowchart
             agent-im-3[Agent]
         end
         subgraph proxy-im[Proxies]
-            subgraph proxy-im-ny[USA]
+            subgraph proxy-im-ny[US]
                 proxy-im-usa-1([Envoy])
                 proxy-im-usa-2([Envoy])
             end
@@ -96,13 +96,13 @@ config:
 flowchart
     subgraph int[Internal Zone]
         subgraph proxy[API Gateway]
-            subgraph proxy-eu[EU]
+            subgraph proxy-eu[EUR]
                 proxy-1(["`1
                     Envoy`"])
                 proxy-3(["`3
                     Envoy`"])
             end
-            subgraph proxy-us[US]
+            subgraph proxy-us[USA]
                 proxy-2(["`2
                     Envoy`"])
                 proxy-4(["`4
@@ -111,7 +111,7 @@ flowchart
             proxy-eu ~~~ proxy-us
         end
         subgraph app-1[Heavy App]
-            subgraph app-1-eu[EU]
+            subgraph app-1-eu[EUR]
                 app-1-1["`1
                     Envoy
                     Heavy App`"]
@@ -122,7 +122,7 @@ flowchart
                     Envoy
                     Heavy App`"]
             end
-            subgraph app-1-us[US]
+            subgraph app-1-us[USA]
                 app-1-2["`2
                     Envoy
                     Heavy App`"]
@@ -136,7 +136,7 @@ flowchart
             app-1-eu ~~~ app-1-us
         end
         subgraph app-2[Light App]
-            subgraph app-2-eu[EU]
+            subgraph app-2-eu[EUR]
                 app-2-1["`1
                     Envoy
                     Light App 1
@@ -146,7 +146,7 @@ flowchart
                     Light App 1
                     Light App 2`"]
             end
-            subgraph app-2-us[US]
+            subgraph app-2-us[USA]
                 app-2-2["`2
                     Envoy
                     Light App 1
